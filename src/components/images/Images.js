@@ -15,6 +15,7 @@ class Images extends Component {
       coord1: 38.540580,
       coord2: -121.877271,
       dates: [],
+      fieldName: ''
     }
 
   }
@@ -44,6 +45,19 @@ class Images extends Component {
         }, () => {
           this.setMap(this.state.epoch[this.state.epoch.length-1]);
         })
+      })
+      .then(() => {
+        axios.get('https://api2.terravion.com/userBlocks/getUserBlocksForMap?userId=5bad4dfa-7262-4a0a-b1e5-da30793cec65&access_token=2e68cee0-b2fd-4ef5-97f6-8e44afb09ffa')
+          .then((response) => {
+            response.data.map((info) => {
+              if (info.blockId === '48ed28ca-d272-4d1f-bfe0-cb95b61eecbc') {
+                this.setState({
+                  fieldName: info.fieldName
+                });
+              }
+              return ''
+            })
+          })
       })
   }
 
@@ -82,6 +96,12 @@ class Images extends Component {
 
   render() {
     return (
+      <React.Fragment>
+      <div className="row">
+        <div className="col-12">
+          <h2>{this.state.fieldName}</h2>
+        </div>
+      </div>
       <div className="row">
         <div className="col-8">
           <div id="mapid"></div>
@@ -90,6 +110,7 @@ class Images extends Component {
           <DatePicker setEpochEnd={this.setEpochEnd} dates={this.state.dates}/>
         </div>
       </div>
+      </React.Fragment>
     );
   }
 }
